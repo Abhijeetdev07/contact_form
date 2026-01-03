@@ -12,9 +12,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [loadError, setLoadError] = useState('');
   const [deleteError, setDeleteError] = useState('');
+  const [submitErrorBanner, setSubmitErrorBanner] = useState('');
   const [successBanner, setSuccessBanner] = useState('');
   const [sortOrder, setSortOrder] = useState('newest');
   const bannerTimeoutRef = useRef(null);
+  const submitErrorTimeoutRef = useRef(null);
 
   const sortedContacts = [...contacts].sort((a, b) => {
     const aTime = new Date(a?.createdAt || 0).getTime();
@@ -63,6 +65,15 @@ function App() {
     if (!res.ok) {
       const err = new Error(data?.message || 'Failed to submit contact');
       err.fieldErrors = data?.errors;
+
+      setSubmitErrorBanner(err.message);
+      if (submitErrorTimeoutRef.current) {
+        window.clearTimeout(submitErrorTimeoutRef.current);
+      }
+      submitErrorTimeoutRef.current = window.setTimeout(() => {
+        setSubmitErrorBanner('');
+      }, 2000);
+
       throw err;
     }
 
@@ -74,6 +85,7 @@ function App() {
 
     setDeleteError('');
     setLoadError('');
+    setSubmitErrorBanner('');
     setSuccessBanner('Contact submitted successfully.');
     if (bannerTimeoutRef.current) window.clearTimeout(bannerTimeoutRef.current);
     bannerTimeoutRef.current = window.setTimeout(() => {
@@ -127,6 +139,12 @@ function App() {
         {loadError ? (
           <div className="mt-6 rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-800">
             {loadError}
+          </div>
+        ) : null}
+
+        {submitErrorBanner ? (
+          <div className="mt-3 rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-800">
+            {submitErrorBanner}
           </div>
         ) : null}
 
