@@ -7,7 +7,15 @@ const contactsRouter = require('./routes/contacts');
 
 const app = express();
 
-app.use(cors());
+const allowedOrigin = process.env.CLIENT_URL || process.env.VITE_API_BASE_URL;
+
+app.use(
+  cors({
+    origin: allowedOrigin || true,
+    methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+    optionsSuccessStatus: 200,
+  })
+);
 app.use(express.json());
 
 app.get('/health', (req, res) => {

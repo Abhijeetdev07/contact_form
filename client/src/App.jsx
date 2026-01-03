@@ -2,6 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import ContactForm from './components/ContactForm';
 import ContactList from './components/ContactList';
 
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000').replace(
+  /\/$/,
+  ''
+);
+
 function App() {
   const [contacts, setContacts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +30,7 @@ function App() {
     setLoadError('');
     setIsLoading(true);
     try {
-      const res = await fetch('http://localhost:5000/api/contacts');
+      const res = await fetch(`${API_BASE_URL}/api/contacts`);
       const data = await res.json();
 
       if (!res.ok) {
@@ -45,7 +50,7 @@ function App() {
   }, []);
 
   async function handleSubmit(values) {
-    const res = await fetch('http://localhost:5000/api/contacts', {
+    const res = await fetch(`${API_BASE_URL}/api/contacts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -85,7 +90,7 @@ function App() {
     setContacts((prev) => prev.filter((c) => (c._id || c.id) !== id));
 
     try {
-      const res = await fetch(`http://localhost:5000/api/contacts/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/contacts/${id}`, {
         method: 'DELETE',
       });
 
