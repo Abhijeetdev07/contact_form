@@ -140,7 +140,7 @@ function ContactForm({ onSubmit }) {
                 ? 'border-rose-300'
                 : 'border-slate-300'
             }`}
-            placeholder="you@example.com"
+            placeholder="you@email.com"
           />
           {errors.email && touched.email ? (
             <p className="mt-1 text-xs text-rose-600">{errors.email}</p>
