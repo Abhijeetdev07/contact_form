@@ -155,15 +155,20 @@ function ContactForm({ onSubmit }) {
             onChange={handleChange}
             onBlur={handleBlur}
             type="number"
-            minLength={10}
-            maxLength={10}
             className={`mt-1 w-full rounded-md border px-3 py-2 text-sm outline-none focus:border-slate-400 ${
               errors.phone && touched.phone
                 ? 'border-rose-300'
                 : 'border-slate-300'
             }`}
             placeholder="0000000000"
+            pattern="[0-9]{10}"
+            onInput={(e) => {
+              e.target.value = e.target.value.slice(0, 10)
+            }}
           />
+          {errors.phone && touched.phone && values.phone.length !== 10
+            ? 'Phone number must be 10 digits'
+            : null}
           {errors.phone && touched.phone ? (
             <p className="mt-1 text-xs text-rose-600">{errors.phone}</p>
           ) : null}
