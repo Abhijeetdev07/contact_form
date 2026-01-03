@@ -154,13 +154,13 @@ function ContactForm({ onSubmit }) {
             value={values.phone}
             onChange={handleChange}
             onBlur={handleBlur}
-            type="tel"
+            type="number"
             className={`mt-1 w-full rounded-md border px-3 py-2 text-sm outline-none focus:border-slate-400 ${
               errors.phone && touched.phone
                 ? 'border-rose-300'
                 : 'border-slate-300'
             }`}
-            placeholder="9876543210"
+            placeholder="0000000000"
           />
           {errors.phone && touched.phone ? (
             <p className="mt-1 text-xs text-rose-600">{errors.phone}</p>
