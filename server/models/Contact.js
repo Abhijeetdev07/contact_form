@@ -20,8 +20,7 @@ const contactSchema = new mongoose.Schema(
       required: true,
       trim: true,
       unique: true,
-      maxlength: 10,
-      minlength: 10,
+      length:10,
     },
     message: {
       type: String,
