@@ -155,6 +155,8 @@ function ContactForm({ onSubmit }) {
             onChange={handleChange}
             onBlur={handleBlur}
             type="number"
+            minLength={10}
+            maxLength={10}
             className={`mt-1 w-full rounded-md border px-3 py-2 text-sm outline-none focus:border-slate-400 ${
               errors.phone && touched.phone
                 ? 'border-rose-300'
