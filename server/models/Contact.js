@@ -12,12 +12,14 @@ const contactSchema = new mongoose.Schema(
       required: true,
       trim: true,
       lowercase: true,
+      unique: true,
       match: [/^\S+@\S+\.\S+$/, 'Invalid email format'],
     },
     phone: {
       type: String,
       required: true,
       trim: true,
+      unique: true,
     },
     message: {
       type: String,

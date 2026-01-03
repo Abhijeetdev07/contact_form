@@ -37,6 +37,24 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ message: 'Validation failed', errors });
     }
 
+    const existing = await Contact.findOne({
+      $or: [{ email: trimmedEmail.toLowerCase() }, { phone: trimmedPhone }],
+    }).lean();
+
+    if (existing) {
+      const conflictErrors = {};
+      if ((existing.email || '').toLowerCase() === trimmedEmail.toLowerCase()) {
+        conflictErrors.email = 'Email already exists';
+      }
+      if ((existing.phone || '') === trimmedPhone) {
+        conflictErrors.phone = 'Phone already exists';
+      }
+
+      return res
+        .status(409)
+        .json({ message: 'Duplicate contact', errors: conflictErrors });
+    }
+
     const created = await Contact.create({
       name: trimmedName,
       email: trimmedEmail,
@@ -46,6 +64,13 @@ router.post('/', async (req, res) => {
 
     return res.status(201).json({ message: 'Contact created', contact: created });
   } catch (err) {
+    if (err && err.code === 11000) {
+      const dupErrors = {};
+      if (err.keyPattern?.email) dupErrors.email = 'Email already exists';
+      if (err.keyPattern?.phone) dupErrors.phone = 'Phone already exists';
+      return res.status(409).json({ message: 'Duplicate contact', errors: dupErrors });
+    }
+
     return res.status(500).json({ message: 'Failed to create contact' });
   }
 });
